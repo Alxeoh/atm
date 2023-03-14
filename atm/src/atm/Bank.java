@@ -19,11 +19,10 @@ public class Bank {
 		this.log = -1;
 		this.sc = new Scanner(System.in);
 		this.exitRun = true;
-		this.exitAdmin = true;
 	}
 
 	private int selectMenu() {
-		System.out.println("입력 : ");
+		System.out.println("메뉴 입력 : ");
 		int num = this.sc.nextInt();
 		return num;
 	}
@@ -86,37 +85,37 @@ public class Bank {
 	}
 
 	private void addUser() {
-		System.out.print("id : ");
+		System.out.print("회원가입 하실 Id 입력 : ");
 		String id = inputString();
 		if (checkDuplId(id)) {
-			System.out.println("중복된 id가 있습니다.");
+			System.out.printf("[회원등록 실패]\n중복된 id가 있습니다.\n");
 		} else {
-			System.out.print("pw : ");
+			System.out.print("회원가입 하실 Pw 입력 : ");
 			String pw = inputString();
-			System.out.print("이름 : ");
+			System.out.print("회원가입 하실 분의 이름 입력 : ");
 			String name = inputString();
 			int count = 0;
 			User tmp = new User(count, id, pw, name);
 			this.um.createUserList(tmp);
-			System.out.println("등록되었습니다.");
+			System.out.println("[회원등록 성공]");
 		}
 	}
 
 	private void deleteUser() {
-		System.out.println("id : ");
+		System.out.println("탈퇴하실 Id 입력 : ");
 		String id = inputString();
 		if (checkDuplId(id)) {
 			int idx = checkIdx(id);
-			System.out.print("pw : ");
+			System.out.print("탈퇴하실 Pw 입력 : ");
 			String pw = inputString();
 			if (checkPw(idx, pw)) {
 				this.um.deleteUser(idx);
-				System.out.println("탈퇴되었습니다.");
+				System.out.println("[회원탈퇴 성공]");
 			} else {
-				System.out.println("패스워드를 확인하세요. ");
+				System.out.printf("[회원탈퇴 실패]\n패스워드를 확인하세요. \n");
 			}
 		} else {
-			System.out.println("등록되지않은 아이디 입니다.");
+			System.out.printf("[회원탈퇴 실패]\n등록되지않은 아이디 입니다.\n");
 		}
 	}
 
@@ -126,10 +125,10 @@ public class Bank {
 				this.um.getUserList().get(this.log).setCount();
 				this.am.createAccount(this.um.getUserList().get(this.log).getId());
 				System.out.printf("[계좌생성 완료]\n현재 %s님의 계좌는 %d개 입니다.\n(최대 3개까지 발급가능)\n",
-						this.um.getUserList().get(this.log).getId(), this.um.getUserList().get(this.log).getCount());
+						this.um.getUserList().get(this.log).getName(), this.um.getUserList().get(this.log).getCount());
 			} else {
 				System.out.printf("[계좌생성 불가]\n현재 %s님의 계좌는 %d개 입니다.\n(최대 3개까지 발급가능)\n",
-						this.um.getUserList().get(this.log).getId(), this.um.getUserList().get(this.log).getCount());
+						this.um.getUserList().get(this.log).getName(), this.um.getUserList().get(this.log).getCount());
 			}
 		} else {
 			System.out.println("로그인 후 이용가능.");
@@ -143,8 +142,9 @@ public class Bank {
 			if (checkPersonal(this.um.getUserList().get(this.log).getId(), personalNum)) {
 				int deletdNum = AccountIndex(this.um.getUserList().get(this.log).getId(), personalNum);
 				am.deletdAccount(deletdNum);
+				System.out.println("[계좌삭제 완료]");
 			} else {
-				System.out.println("계좌의 고유번호를 다시 확인하세요. ");
+				System.out.printf("[계좌삭제 실패]\n계좌의 고유번호를 다시 확인하세요.\n");
 			}
 		} else {
 			System.out.println("로그인 후 이용가능.");
@@ -153,20 +153,20 @@ public class Bank {
 
 	private void login() {
 		if (this.log == -1) {
-			System.out.print("id : ");
+			System.out.print("로그인 하실 Id 입력 : ");
 			String id = inputString();
 			if (checkDuplId(id)) {
-				System.out.println("pw : ");
+				System.out.println("로그인 하실 Pw 입력 : ");
 				String pw = inputString();
 				int idx = checkIdx(id);
 				if (checkPw(idx, pw)) {
-					System.out.printf("[로그인 성공]\n%s님 환영합니다.\n", id);
+					System.out.printf("[로그인 성공]\n%s님 환영합니다.\n", um.getUserList().get(idx).getName());
 					this.log = idx;
 				} else {
-					System.out.println("패스워드를 확인하세요. ");
+					System.out.printf("[로그인 실패]\n패스워드를 확인하세요.\n");
 				}
 			} else {
-				System.out.println("등록되지않은 아이디 입니다.");
+				System.out.printf("[로그인 실패]\n등록되지않은 아이디 입니다.\n");
 			}
 		} else {
 			System.out.println("이미 로그인 상태입니다.");
@@ -175,10 +175,10 @@ public class Bank {
 
 	private void logout() {
 		if (this.log != -1) {
-			System.out.println("로그아웃 되었습니다. ");
+			System.out.println("[로그아웃 완료] ");
 			this.log = -1;
 		} else {
-			System.out.println("이미 로그아웃 상태입니다. ");
+			System.out.printf("[로그아웃 불가]\n이미 로그아웃 상태입니다.\n");
 		}
 	}
 
@@ -197,6 +197,9 @@ public class Bank {
 	}
 
 	private void printAllUser() {
+		if(um.getUserList().size()<1) {
+			System.out.printf("[고객정보조회 불가]\n등록되어있는 고객정보가 없습니다.\n");
+		}
 		for (int i = 0; i < um.getUserList().size(); i++) {
 			System.out.printf("%d) 이름: %s / Id: %s / pw: %s\n", i + 1, um.getUserList().get(i).getName(),
 					um.getUserList().get(i).getId(), um.getUserList().get(i).getPw());
@@ -227,11 +230,17 @@ public class Bank {
 	}
 
 	private void searchUser() {
-		System.out.print("찾으실 고객의 Id를 입력하세요 : ");
-		String id = inputString();
-		if (checkDuplId(id)) {
-			int idx = checkIdx(id);
-			printUser(idx);
+		if(um.getUserList().size()<1) {
+			System.out.printf("[고객조회 불가]\n등록되어있는 고객이 없습니다.\n");
+		}else {
+			System.out.print("찾으실 고객의 Id 입력 : ");
+			String id = inputString();
+			if (checkDuplId(id)) {
+				int idx = checkIdx(id);
+				printUser(idx);
+			}else {
+				System.out.printf("[고객조회 불가]\n등록되어있는 Id가 아닙니다.\n");
+			}
 		}
 	}
 
@@ -250,9 +259,9 @@ public class Bank {
 	}
 
 	private void admin() {
-		System.out.print("관리자 id : ");
+		System.out.print("관리자 Id 입력 : ");
 		String id = inputString();
-		System.out.print("관리자 pw : ");
+		System.out.print("관리자 Pw 입력 : ");
 		String pw = inputString();
 		if (adminCheck(id, pw)) {
 			while (this.exitAdmin) {
@@ -261,7 +270,7 @@ public class Bank {
 				adminMenuSelect(select);
 			}
 		} else {
-			System.out.println("관리자 정보를 다시 확인하세요. ");
+			System.out.printf("[로그인 불가]\n관리자 정보를 다시 확인하세요.\n");
 		}
 	}
 
@@ -270,6 +279,7 @@ public class Bank {
 	}
 
 	private void menu(int select) {
+		this.exitAdmin = true;
 		if (select == 1) {
 			addUser();
 		} else if (select == 2) {
@@ -297,10 +307,11 @@ public class Bank {
 			System.out.println("1. 회원가입");
 			System.out.println("2. 회원탈퇴");
 			System.out.println("3. 계좌신청");
-			System.out.println("4. 계좌철회");
+			System.out.println("4. 계좌삭제");
 			System.out.println("5. 로그인");
 			System.out.println("6. 로그아웃");
 			System.out.println("7. 관리자모드");
+			System.out.println("--------------------");
 			int select = selectMenu();
 			menu(select);
 		}

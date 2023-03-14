@@ -111,6 +111,9 @@ public class Bank {
 			if (checkPw(idx, pw)) {
 				this.um.deleteUser(idx);
 				System.out.println("[회원탈퇴 성공]");
+				if(log == idx) {
+					log = -1;
+				}
 			} else {
 				System.out.printf("[회원탈퇴 실패]\n패스워드를 확인하세요. \n");
 			}

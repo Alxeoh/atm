@@ -83,106 +83,134 @@ public class Bank {
 		return check;
 	}
 
-	private void menu(int select) {
-		if (select == 1) {
+	private void addUser() {
+		System.out.print("id : ");
+		String id = inputString();
+		if (checkDuplId(id)) {
+			System.out.println("중복된 id가 있습니다.");
+		} else {
+			System.out.print("이름 : ");
+			String name = inputString();
+			System.out.print("pw : ");
+			String pw = inputString();
+			int count = 1;
+			User tmp = new User(count, id, pw, name);
+			um.createUserList(tmp);
+			System.out.println("등록되었습니다.");
+		}
+	}
+
+	private void deleteUser() {
+		System.out.println("id : ");
+		String id = inputString();
+		if (checkDuplId(id)) {
+			int idx = checkIdx(id);
+			System.out.print("pw : ");
+			String pw = inputString();
+			if (checkPw(idx, pw)) {
+				um.deleteUser(idx);
+				System.out.println("탈퇴되었습니다.");
+			} else {
+				System.out.println("패스워드를 확인하세요. ");
+			}
+		} else {
+			System.out.println("등록되지않은 아이디 입니다.");
+		}
+	}
+
+	private void addAccount() {
+		if (log != -1) {
+			if (um.getUserList().get(log).getCount() < 3) {
+				am.createAccount(um.getUserList().get(log).getId());
+				System.out.println("계좌생성완료");
+				System.out.printf("현재 %s님의 계좌는 %d개 입니다.\n(최대 3개까지 발급가능)\n", um.getUserList().get(log).getId(),
+						um.getUserList().get(log).getCount());
+			} else {
+				System.out.printf("현재 %s님의 계좌는 %d개 입니다.\n(최대 3개까지 발급가능)\n", um.getUserList().get(log).getId(),
+						um.getUserList().get(log).getCount());
+			}
+		} else {
+			System.out.println("로그인 후 이용가능.");
+		}
+	}
+
+	private void deleteAccount() {
+		if (log != -1) {
+			System.out.print("삭제할 계좌의 고유번호를 입력하세요 : ");
+			String personalNum = inputString();
+			if (checkPersonal(um.getUserList().get(log).getId(), personalNum)) {
+				int deletdNum = AccountIndex(um.getUserList().get(log).getId(), personalNum);
+				am.deletdAccount(deletdNum);
+			} else {
+				System.out.println("계좌의 고유번호를 다시 확인하세요. ");
+			}
+		} else {
+			System.out.println("로그인 후 이용가능.");
+		}
+	}
+
+	private void login() {
+		if (log == -1) {
 			System.out.print("id : ");
 			String id = inputString();
 			if (checkDuplId(id)) {
-				System.out.println("중복된 id가 있습니다.");
-			} else {
-				System.out.print("이름 : ");
-				String name = inputString();
-				System.out.print("pw : ");
+				System.out.println("pw : ");
 				String pw = inputString();
-				int count = 1;
-				User tmp = new User(count, id, pw, name);
-				um.createUserList(tmp);
-				System.out.println("등록되었습니다.");
-			}
-		} else if (select == 2) {
-			System.out.println("id : ");
-			String id = inputString();
-			if (checkDuplId(id)) {
 				int idx = checkIdx(id);
-				System.out.print("pw : ");
-				String pw = inputString();
 				if (checkPw(idx, pw)) {
-					um.deleteUser(idx);
-					System.out.println("탈퇴되었습니다.");
+					System.out.printf("[로그인 성공]\n%s님 환영합니다.\n", id);
+					this.log = idx;
 				} else {
 					System.out.println("패스워드를 확인하세요. ");
 				}
 			} else {
 				System.out.println("등록되지않은 아이디 입니다.");
 			}
+		} else {
+			System.out.println("이미 로그인 상태입니다.");
+		}
+	}
+
+	private void logout() {
+		if (log != -1) {
+			System.out.println("로그아웃 되었습니다. ");
+		} else {
+			System.out.println("이미 로그아웃 상태입니다. ");
+		}
+	}
+
+	private void menu(int select) {
+		if (select == 1) {
+			addUser();
+		} else if (select == 2) {
+			deleteUser();
 		} else if (select == 3) {
-			if (log != -1) {
-				if (um.getUserList().get(log).getCount() < 3) {
-					am.createAccount(um.getUserList().get(log).getId());
-					System.out.println("계좌생성완료");
-					System.out.printf("현재 %s님의 계좌는 %d개 입니다.\n(최대 3개까지 발급가능)", um.getUserList().get(log).getId(),
-							um.getUserList().get(log).getCount());
-				} else {
-					System.out.printf("현재 %s님의 계좌는 %d개 입니다.\n(최대 3개까지 발급가능)", um.getUserList().get(log).getId(),
-							um.getUserList().get(log).getCount());
-				}
-			} else {
-				System.out.println("로그인 후 이용가능.");
-			}
+			addAccount();
 		} else if (select == 4) {
-			if (log != -1) {
-				System.out.print("삭제할 계좌의 고유번호를 입력하세요 : ");
-				String personalNum = inputString();
-				if (checkPersonal(um.getUserList().get(log).getId(), personalNum)) {
-					int deletdNum = AccountIndex(um.getUserList().get(log).getId(), personalNum);
-					am.deletdAccount(deletdNum);
-				} else {
-					System.out.println("계좌의 고유번호를 다시 확인하세요. ");
-				}
-			} else {
-				System.out.println("로그인 후 이용가능.");
-			}
+			deleteAccount();
 		} else if (select == 5) {
-			if (log == -1) {
-				System.out.print("id : ");
-				String id = inputString();
-				if (checkDuplId(id)) {
-					System.out.println("pw : ");
-					String pw = inputString();
-					int idx = checkIdx(id);
-					if (checkPw(idx, pw)) {
-						System.out.printf("[로그인 성공]\n%s님 환영합니다.", id);
-						this.log = idx;
-					} else {
-						System.out.println("패스워드를 확인하세요. ");
-					}
-				} else {
-					System.out.println("등록되지않은 아이디 입니다.");
-				}
-			} else {
-				System.out.println("이미 로그인 상태입니다.");
-			}
+			login();
 		} else if (select == 6) {
-			if (log != -1) {
-				System.out.println("로그아웃 되었습니다. ");
-			} else {
-				System.out.println("이미 로그아웃 상태입니다. ");
-			}
+			logout();
 		} else {
 			System.out.println("없는 메뉴 입니다. ");
 		}
 	}
 
 	void run() {
-		System.out.println("------" + this.name + "------");
-		System.out.println("1. 회원가입");
-		System.out.println("2. 회원탈퇴");
-		System.out.println("3. 계좌신청");
-		System.out.println("4. 계좌철회");
-		System.out.println("5. 로그인");
-		System.out.println("6. 로그아웃");
-		int select = selectMenu();
-		menu(select);
+		while (true) {
+			am.readAccount();
+			um.readUser();
+			System.out.println("------" + this.name + "------");
+			System.out.println("1. 회원가입");
+			System.out.println("2. 회원탈퇴");
+			System.out.println("3. 계좌신청");
+			System.out.println("4. 계좌철회");
+			System.out.println("5. 로그인");
+			System.out.println("6. 로그아웃");
+			int select = selectMenu();
+			menu(select);
+		}
 	}
 
 }

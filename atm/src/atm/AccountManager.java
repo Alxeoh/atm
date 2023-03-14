@@ -22,7 +22,7 @@ public class AccountManager {
 	public void readAccount() {
 		if (AccountManager.list.size() > 0) {
 			for (int i = 0; i < AccountManager.list.size(); i++) {
-				System.out.println("");
+				System.out.printf("%d)) id: %s / Account: %s / personalNum: %s\n",i+1,AccountManager.list.get(i).getId(),AccountManager.list.get(i).getAccount(),AccountManager.list.get(i).getPersonalNum());
 			}
 		} else {
 			System.out.println("등록된 계좌가 없습니다.");

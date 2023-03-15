@@ -5,8 +5,7 @@ public class User {
 	private String id;
 	private String pw;
 	private String name;
-	
-	
+
 	public User(int count, String id, String pw, String name) {
 		this.count = count;
 		this.id = id;
@@ -17,26 +16,33 @@ public class User {
 	public int getCount() {
 		return this.count;
 	}
+
 	public String getId() {
 		return this.id;
 	}
+
 	public String getPw() {
 		return this.pw;
 	}
+
 	public String getName() {
 		return this.name;
 	}
+
 	public void setCount() {
-		this.count = getCount()+1;
+		this.count = getCount() + 1;
 	}
+
 	public void setId(String id) {
 		this.id = id;
 	}
+
 	public void setPw(String pw) {
 		this.pw = pw;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 }

@@ -31,7 +31,8 @@ public class AccountManager {
 			}
 		}
 		String accountNum = "5555-2222-4444-1111-" + personalNum;
-		Account tmp = new Account(id, accountNum, personalNum);
+		int money = 0;
+		Account tmp = new Account(id, accountNum, personalNum, money);
 		AccountManager.list.add(tmp);
 	}
 

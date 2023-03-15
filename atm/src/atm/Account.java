@@ -4,11 +4,13 @@ public class Account {
 	private String id;
 	private String account;
 	private String personalNum;
+	private int money;
 	
-	public Account(String id, String account, String personalNum) {
+	public Account(String id, String account, String personalNum, int money) {
 		this.id = id;
 		this.account = account;
 		this.personalNum = personalNum;
+		this.money = money;
 	}
 	
 	public String getId() {
@@ -19,5 +21,11 @@ public class Account {
 	}
 	public String getPersonalNum() {
 		return this.personalNum;
+	}
+	public int getMoney() {
+		return this.money;
+	}
+	public void setMoney(int money) {
+		this.money = money;
 	}
 }

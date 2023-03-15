@@ -29,4 +29,14 @@ public class User {
 	public void setCount() {
 		this.count = getCount()+1;
 	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public void setPw(String pw) {
+		this.pw = pw;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 }

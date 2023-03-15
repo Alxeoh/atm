@@ -1,9 +1,5 @@
 package atm;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.util.Scanner;
 
 public class Bank {
@@ -194,7 +190,7 @@ public class Bank {
 	private void adminPrint() {
 		System.out.println("1) 전체 고객정보 확인");
 		System.out.println("2) 고객조회");
-		System.out.println("3) 뒤로가기");
+		System.out.println("0) 뒤로가기");
 	}
 
 	private boolean adminCheck(String id, String pw) {
